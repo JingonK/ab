@@ -145,7 +145,7 @@ catch(SecurityException e){
 
     private void getWeatherData(double lat, double lng){
         String url = "http://api.openweathermap.org/data/2.5/weather?lat="+lat+"&lon="+lng+"&appid=dafbdf14f38344cea716791d2ae1e147";
-        //abcdㄷ
+        //abcdㄷw
           ReceiveWeatherTask receiveUseTask = new ReceiveWeatherTask();
         receiveUseTask.execute(url);
     }
