@@ -33,7 +33,6 @@ public class Changeinfo_pet extends AppCompatActivity {
                 intent2.setType("image/*");
                 intent2.setAction(Intent.ACTION_GET_CONTENT);
                 startActivityForResult(intent2,REQUEST_CODE);
-
             }
 
 

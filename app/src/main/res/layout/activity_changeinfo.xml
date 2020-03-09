@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -41,7 +42,7 @@
             android:layout_height="match_parent"
             android:layout_weight="0.8"
             android:gravity="center_vertical"
-            android:text=""/>
+            android:text="" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -64,7 +65,7 @@
             android:layout_weight="0.8"
             android:gravity="center_vertical"
             android:inputType="textPassword"
-            android:text=""/>
+            android:text="" />
     </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
@@ -123,10 +124,10 @@
             android:layout_height="match_parent"
             android:layout_weight="0.2"
             android:gravity="center_vertical"
-            android:text="반려견 이름" />
+            android:text="핸드폰번호" />
 
         <EditText
-            android:id="@+id/dogname_edit_CI"
+            android:id="@+id/phone_edit_CI"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_weight="0.8"
