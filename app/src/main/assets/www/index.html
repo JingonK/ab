@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+    <title>simpleMap</title>
+    <script src="https://apis.openapi.sk.com/tmap/js?version=1&format=javascript&appKey=l7xxcc595953ea344f68b5a45b96fd5bc629"></script>
+    <script type="text/javascript">
+
+
+
+    function init()
+{
+    navigator.geolocation.getCurrentPosition(initTmap);
+}
+
+
+
+window.addEventListener("load", init);
+		function initTmap(position){
+				var map = new Tmap.Map({
+					div:'map_div',
+					width : "934px",
+					height : "452px",
+				});
+map.setCenter(new Tmap.LonLat(position.coords.longitude,position.coords.latitude ).transform("EPSG:4326", "EPSG:3857"), 15);
+
+			}
+function setVariables(){
+    zoom = 16;
+}
+
+</script>
+</head>
+<body >
+<div id="map_div">
+</div>
+</body>
+</html>

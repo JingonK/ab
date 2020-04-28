@@ -70,15 +70,16 @@ public class fragment1 extends Fragment {
         temp1 = (TextView) view2.findViewById(R.id.textView6);
         cloud = (TextView) view2.findViewById(R.id.t2);
         wind = (TextView) view2.findViewById(R.id.t3);
-        Bundle extra = this.getArguments();
-        String id = extra.getString("id"); // 전달한 key 값
 
+        String id ; // 전달한 key 값
+        Intent intent = getActivity().getIntent();
+        id = intent.getStringExtra("id");
          Toast.makeText(getActivity(),id+"님 어서오세요~~ ",Toast.LENGTH_LONG).show();
         btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(getActivity(), Sub.class);
-
+                intent.putExtra("id",id);
                 intent.putExtra("lat", lat);
                 intent.putExtra("lon", lon);
 

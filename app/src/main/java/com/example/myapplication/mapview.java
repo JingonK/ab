@@ -1,127 +1,141 @@
 package com.example.myapplication;
-
+import android.Manifest;
+import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.SystemClock;
+import android.util.Base64;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.webkit.WebChromeClient;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListAdapter;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AlertDialog;
-import androidx.fragment.app.Fragment;
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.fragment.app.FragmentManager;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.toolbox.Volley;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.protocol.HTTP;
+import android.widget.Chronometer;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.skt.Tmap.TMapGpsManager;
+import com.skt.Tmap.TMapMarkerItem;
+import com.skt.Tmap.TMapPoint;
+import com.skt.Tmap.TMapPolyLine;
+import com.skt.Tmap.TMapView;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
-import java.io.InputStream;
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStreamReader;
+import java.io.InputStream;
+
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Vector;
 
-public class fragment2 extends Fragment {
+
+public class mapview extends  AppCompatActivity  {
+    String mJsonString;
+    ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
+
     private static final String TAG_JSON="totaltimelist";
     private static String TAG = "phptest_MainActivity";
-    private static final String totalt="totaltime" ;
 
     HashMap<String, String> map = new HashMap<>();;
     private static final String t="time" ;
-    String mJsonString;
-
-
-    ListView mlistView;
-    String Id="Id";
+      String Id="Id";
     String id ;
-
+    String lat_ ="lat";
+    String lon_ = "ron";
+    TMapView tmapview;
     ArrayAdapter<String> adapter;
     ArrayList<HashMap<String, String>> mArrayList;
-
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        View view2 = inflater.inflate(R.layout.activity_fragment2, container, false);
-        mlistView = (ListView)view2.findViewById(R.id.listv);
-        Intent intent = getActivity().getIntent();
-        id = intent.getStringExtra("id");
-        mArrayList = new ArrayList<>();
+    protected  void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_mapview);
+
+
+        ArrayList<TMapPoint> alTMapPoint = new ArrayList<TMapPoint>();
+
+        TMapGpsManager tmapgps ;
+
+        RelativeLayout relativeLayout;
+        String getTime;
+
+        String id =getIntent().getStringExtra("id");
+        String time =getIntent().getStringExtra("time");
+
+
+
+
+            final LocationManager lm = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+
+
+            relativeLayout =  (RelativeLayout) findViewById(R.id.map_view2);
+
+
+           tmapview =new TMapView(this);
+
+            tmapview.setCenterPoint(126.96544,37.299, false);
+            tmapview.setSKTMapApiKey("l7xxcc595953ea344f68b5a45b96fd5bc629");
+            relativeLayout.addView(tmapview);
+            tmapview.setZoomLevel(14);
+
         GetData task = new GetData();
-        AdapterView.OnItemClickListener listener= new AdapterView.OnItemClickListener() {
-
-
-
-            //ListView의 아이템 중 하나가 클릭될 때 호출되는 메소드
-
-            //첫번째 파라미터 : 클릭된 아이템을 보여주고 있는 AdapterView 객체(여기서는 ListView객체)
-
-            //두번째 파라미터 : 클릭된 아이템 뷰
-
-            //세번째 파라미터 : 클릭된 아이템의 위치(ListView이 첫번째 아이템(가장위쪽)부터 차례대로 0,1,2,3.....)
-
-            //네번재 파리미터 : 클릭된 아이템의 아이디(특별한 설정이 없다면 세번째 파라이터인 position과 같은 값)
-
-            @Override
-
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
-                // TODO Auto-generated method stub
-                Intent intent = new Intent(getActivity(), mapview.class);
-                intent.putExtra("id",mArrayList.get(position).get("Id"));
-                intent.putExtra("time",mArrayList.get(position).get("time"));
-
-                startActivityForResult(intent, 1001);
-
-
-                //클릭된 아이템의 위치를 이용하여 데이터인 문자열을 Toast로 출력
-
-
-            }
-
-        };
-
-
-
-        mlistView.setOnItemClickListener(listener);
-
-
         map.put("id",id);
-        task.execute("http://121.168.248.192/list.php");
+        map.put("time",time);
+        task.execute("http://121.168.248.192/maproute.php");
+            //우성 현위치정보
 
-
-        return view2;
-    }
+        }
 
 
     private class GetData extends AsyncTask<String, Void, String> {
@@ -132,7 +146,7 @@ public class fragment2 extends Fragment {
         protected void onPreExecute() {
             super.onPreExecute();
 
-            progressDialog = ProgressDialog.show(getActivity(),
+            progressDialog = ProgressDialog.show(mapview.this,
                     "Please Wait", null, true, true);
         }
 
@@ -251,31 +265,29 @@ public class fragment2 extends Fragment {
             JSONObject jsonObject = new JSONObject(mJsonString);
 
             JSONArray jsonArray = jsonObject.getJSONArray(TAG_JSON);
-
             for(int i=0;i<jsonArray.length();i++){
 
                 JSONObject item = jsonArray.getJSONObject(i);
 
-                String id = item.getString(Id);
-                String time_ = item.getString(t);
-                String total_time = item.getString(totalt);
-
-                HashMap<String,String> hashMap = new HashMap<>();
-
-                hashMap.put(Id, id);
-                hashMap.put(t, time_);
-                hashMap.put(totalt, total_time);
-                mArrayList.add(hashMap);
+                String lat = item.getString(lat_);
+                String lon = item.getString(lon_);
+                alTMapPoint.add( new TMapPoint(Double.parseDouble(lat), Double.parseDouble(lon)) );
             }
 
+            Toast.makeText(mapview.this,String.valueOf(alTMapPoint.size()),Toast.LENGTH_LONG).show();
+            TMapPolyLine tMapPolyLine = new TMapPolyLine();
+            tMapPolyLine.setLineColor(Color.BLUE);
+            tMapPolyLine.setLineWidth(2);
 
-            ListAdapter adapter = new SimpleAdapter(
-                    getActivity(), mArrayList, R.layout.item_list,
-                    new String[]{Id,t, totalt},
-                    new int[]{R.id.textView_list_id, R.id.textView_list_name, R.id.textView_list_address}
-            );
-            mlistView.setAdapter(adapter);
-
+            Toast.makeText(mapview.this,String.valueOf(alTMapPoint.size()),Toast.LENGTH_LONG).show();
+            for( int i=0; i<alTMapPoint.size(); i++ ) {
+                tMapPolyLine.addLinePoint( alTMapPoint.get(i) );
+            }
+            tmapview.addTMapPolyLine("Line1", tMapPolyLine);
+            tmapview.setCompassMode(false);//보는 방향
+            tmapview.setIconVisibility(false);// 현위치 아이콘표시
+            tmapview.setZoomLevel(14);
+            tmapview.setSightVisible(false);
         } catch (JSONException e) {
 
             Log.d(TAG, "showResult : ", e);

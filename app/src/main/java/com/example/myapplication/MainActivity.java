@@ -29,7 +29,12 @@ private FragmentTransaction transaction;
         String name = intent.getStringExtra("name");
         String id =intent.getStringExtra("id");
         Intent intent2 = new Intent(MainActivity.this,fragment3.class);
+        Intent intent3 =new Intent(MainActivity.this,fragment1.class);
+
         intent2.putExtra("id",id);
+
+        intent3.putExtra("id",id);
+
 
 
         fragmentManager = getSupportFragmentManager();

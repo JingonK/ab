@@ -92,7 +92,7 @@ private EditText editTextName;
                     String Pw = (String) params[1];
                     String Name = (String) params[2];
 
-                    String link = "http://121.168.8.78/signup.php";
+                    String link = "http://121.168.248.192/signup.php";
                     String data = URLEncoder.encode("Id", "UTF-8") + "=" + URLEncoder.encode(Id, "UTF-8")+"&" + URLEncoder.encode("Pw", "UTF-8") + "=" + URLEncoder.encode(Pw, "UTF-8")+ "&" + URLEncoder.encode("Name", "UTF-8") + "=" + URLEncoder.encode(Name, "UTF-8");
 
 

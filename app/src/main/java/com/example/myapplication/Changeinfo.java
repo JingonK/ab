@@ -142,7 +142,7 @@ editTextAge=(EditText)findViewById(R.id.age_edit_CI);
                     String Phone = (String) params[3];
                     String Birth = (String) params[4];
 
-                    String link = "http://121.168.8.78/change_info_user.php";
+                    String link = "http://121.168.248.192/change_info_user.php";
                     String data = URLEncoder.encode("Id", "UTF-8") + "=" + URLEncoder.encode(Id, "UTF-8")+"&" + URLEncoder.encode("Pw", "UTF-8") + "=" + URLEncoder.encode(Pw, "UTF-8")+ "&" + URLEncoder.encode("Name", "UTF-8") + "=" + URLEncoder.encode(Name, "UTF-8")+"&"+ URLEncoder.encode("Phone", "UTF-8") + "=" + URLEncoder.encode(Phone, "UTF-8")+"&"+ URLEncoder.encode("Birth", "UTF-8") + "=" + URLEncoder.encode(Birth, "UTF-8");
 
 

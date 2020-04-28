@@ -56,6 +56,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.net.URLEncoder;
 import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -150,7 +151,9 @@ public class Login extends AppCompatActivity {
             }
         });
 
-    }  @Override
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (Session.getCurrentSession().handleActivityResult(requestCode, resultCode, data)) {
             return;
@@ -273,7 +276,7 @@ public class Login extends AppCompatActivity {
                     String Pw = (String) params[1];
                     String Name = (String) params[2];
 
-                    String link = "http://121.168.8.78/signup.php";
+                    String link = "http://121.168.248.192/signup.php";
                     String data = URLEncoder.encode("Id", "UTF-8") + "=" + URLEncoder.encode(Id, "UTF-8")+"&" + URLEncoder.encode("Pw", "UTF-8") + "=" + URLEncoder.encode(Pw, "UTF-8")+ "&" + URLEncoder.encode("Name", "UTF-8") + "=" + URLEncoder.encode(Name, "UTF-8");
 
 
